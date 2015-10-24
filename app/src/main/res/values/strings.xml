@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PhotoDemo</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_album">AlbumActivity</string>
+    <string name="title_activity_recorder_vedio">RecorderVedioActivity</string>
+
+    <string name="title_activity_album_info">AlbumInfoActivity</string>
+    <string name="title_activity_video_record">VideoRecordActivity</string>
+</resources>
