@@ -1,4 +1,4 @@
-package com.org.photodemo.record;
+package com.org.photodemo.ui.record;
 
 
 import android.app.AlertDialog;
@@ -8,7 +8,6 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -24,11 +23,14 @@ import com.org.photodemo.R;
 import com.org.photodemo.base.BaseActivity;
 import com.org.photodemo.util.DensityUtil;
 import com.org.photodemo.util.FileUtil;
+import com.org.photodemo.util.MyLogger;
 
 import java.io.File;
 import java.io.IOException;
 
 public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.Callback {
+
+    MyLogger myLogger=MyLogger.getMyLogger();
 
     /**
      * **********控件定义 satrt***************
@@ -103,6 +105,7 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
         layoutParam.height = mScreenWidth / 3 * 4;
         // 隐藏多少dp才能让屏幕显示正常像素
         layoutParam.topMargin = -(mScreenWidth / 3 * 4 - mScreenWidth - DensityUtil.dip2px(this, 44));
+
         surfaceVedioView.setLayoutParams(layoutParam);
 
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) imSeekbarBg.getLayoutParams();
@@ -118,6 +121,7 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
 
                         break;
                     case MotionEvent.ACTION_UP:
+                        stopRecord();
                         break;
                     default:
                         break;
@@ -126,10 +130,12 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
             }
         });
 
-        prepareWork();
+       // prepareWork();
     }
 
     private void prepareWork(){
+
+        readVideoPreferences();
         // 创建文件夹
        /* File file = new File(Ppath);
         if (!file.exists()) {
@@ -151,7 +157,7 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 //        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        readVideoPreferences();
+
     }
 
     /**
@@ -167,7 +173,8 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
             videoQualityHigh = (extraVideoQuality > 0);
         }
 
-      //  videoQualityHigh = false;
+       videoQualityHigh = false;
+
         mProfile = CamcorderProfile.get(videoQualityHigh ? CamcorderProfile.QUALITY_HIGH : CamcorderProfile.QUALITY_LOW);
         mProfile.videoFrameWidth = (int) (mProfile.videoFrameWidth * 2.0f);
         mProfile.videoFrameHeight = (int) (mProfile.videoFrameHeight * 2.0f);
@@ -295,13 +302,20 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
     private void initCameraParameters() {
         // 初始化摄像头参数
         mParameters = mCamera.getParameters();
+        myLogger.e("mCamera:"+mCamera);
+        myLogger.e("mParameters:"+mParameters);
+        myLogger.e("mProfile :"+mProfile );
+        myLogger.e("mProfile.videoFrameWidth :"+mProfile.videoFrameWidth );
+        myLogger.e("mProfile.videoFrameHeight :"+mProfile.videoFrameHeight );
+
+
         mParameters.setPreviewSize(mProfile.videoFrameWidth, mProfile.videoFrameHeight);
         mParameters.setPreviewFrameRate(mProfile.videoFrameRate);
         mParameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
         // 设置白平衡参数。
-        mParameters.setWhiteBalance("auto");
+        //mParameters.setWhiteBalance("auto");
         // 参数设置颜色效果。
-        mParameters.setColorEffect("none");
+        //mParameters.setColorEffect("none");
 
         try {
             mCamera.setParameters(mParameters);
@@ -324,6 +338,7 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
     @Override
     protected void onStart() {
         super.onStart();
+        prepareWork();
     }
     @Override
     protected void onPause() {
@@ -368,6 +383,22 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
 
     }
 
+
+    /**
+     * 设置camera显示取景画面,并预览
+     * @param holder
+     */
+    private void setStartPreview(SurfaceHolder holder) {
+        try {
+            if (mCamera != null) {
+                mCamera.setPreviewDisplay(holder);
+                mCamera.startPreview();
+            }
+        } catch (IOException e) {
+
+        }
+    }
+
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 
@@ -375,11 +406,11 @@ public class VideoRecordActivity extends BaseActivity implements SurfaceHolder.C
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
+        setStartPreview(holder);
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        releaseCamera();
     }
 }

@@ -10,11 +10,12 @@ import android.widget.GridView;
 
 import com.org.photodemo.base.BaseActivity;
 
-import com.org.photodemo.record.VideoRecordActivity;
-import com.org.photodemo.ui.recordvdeo.RecorderVedioActivity;
+import com.org.photodemo.camera.CustomCameraActivity;
+import com.org.photodemo.ui.record.VideoRecordActivity;
 import com.org.photodemo.ui.album.AlbumActivity;
 import com.org.photodemo.ui.album.AlbumInfoAdapter;
 import com.org.photodemo.ui.album.bean.PhotoGridItemEntity;
+import com.org.photodemo.ui.takepic.CamereActivity;
 import com.org.photodemo.util.MyLogger;
 import com.org.photodemo.util.PicSelectedUtil;
 
@@ -84,12 +85,16 @@ public class MainActivity extends BaseActivity {
                 startActivity(albumIntent);
                 break;
             case R.id.btn_take_photo:
-                mTokePhoneUri=PicSelectedUtil.doTakePhoto(MainActivity.this,MainActivity.this,PicSelectedUtil.requestcode_camera);
+             //   mTokePhoneUri=PicSelectedUtil.doTakePhoto(MainActivity.this,MainActivity.this,PicSelectedUtil.requestcode_camera);
+                Intent cameraIntent = new Intent(MainActivity.this, CamereActivity.class);
+
+                startActivity(cameraIntent);
                 break;
             case R.id.btn_record_vedio:
                 //
                 // Intent recordVedioIntent = new Intent(MainActivity.this, RecorderVedioActivity.class);
-                Intent recordVedioIntent = new Intent(MainActivity.this, VideoRecordActivity.class);
+                //Intent recordVedioIntent = new Intent(MainActivity.this, VideoRecordActivity.class);
+                Intent recordVedioIntent = new Intent(MainActivity.this, CustomCameraActivity.class);
 
                 startActivity(recordVedioIntent);
                 break;

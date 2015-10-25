@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.org.photodemo.camera.CustomCameraActivity">
+     <com.org.photodemo.camera.CustomCameraView
+         android:id="@+id/customcamera"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_above="@+id/linearlayout_customcamerabuttom"/>
+    <LinearLayout
+        android:id="@+id/linearlayout_customcamerabuttom"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/btn_custom_takepic"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="takepic"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1">
+            <Button
+                android:id="@+id/btn_custom_recordvideo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="recordvideo"/>
+
+        </RelativeLayout>
+
+        </LinearLayout>
+
+
+</RelativeLayout>
